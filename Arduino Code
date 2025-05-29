@@ -1,0 +1,43 @@
+#include <Servo.h>
+
+
+Servo serX;
+Servo serY;
+Servo serT;
+
+String inData;
+
+void setup() {
+	serX.attach(10);
+	serY.attach(11);
+	Serial.begin(9600);
+	Serial.setTimeout(10);
+}
+
+
+void loop(){
+//required I think
+}
+
+void parseData(){
+	inData = Serial.readString();
+	serX.write(xData(inData)); //To get rid of the Y character and data
+	serY.write(yData(inData)); //To get rid of the X character and read in raw data
+  serT.write(shootBool(inData)); //Shoot if bool T is followed by a 1 (true) or 0 (false)
+}
+int xData(String inData) {
+	inData.remove("Y"); //To get rid of the Y character, data after, and the boolean
+	inData.remove(inData.indexOf("X"), 1); //To get rid of the X character and read in x data
+	return inData.toInt();
+}
+
+int yData(String inData){
+	inData.remove(0, inData.indexOf("Y") + 1); //Remove everything from start until Y data.
+	inData.remove("T"); //Remove boolean for just data.
+	return inData.toInt();
+}
+
+int shootBool(String inData){
+	inData.remove(0, inData.indexOf("T") + 1); //Remove everything from start until Y data.
+	return inData.toInt();
+}
