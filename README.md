@@ -4,5 +4,4 @@ As you can see, my name is Shravan Natarajan. If you see any pushes by a "Bavan"
 
 Please do not copy this code directly without my consent (which is probably going to be a yes no matter what). Just please ask first! 
 
-Lastly, I just wanted to mention that the general idea for this was from a video I watched around 7 years ago found here: https://youtu.be/Q8zC3-ZQFJI?si=G9pvzb9SeCSiVWam.
-Due to the fact that these are similar projects, a lot of the code looks somewhat similar.
+
