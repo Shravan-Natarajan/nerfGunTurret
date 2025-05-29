@@ -7,11 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
+//Note for self: Works with a mouse for now, hopefully. Next prototype will be scaling up to facial.
 namespace gunToShootMe
 {
     public partial class Form1 : Form
     {
+        public Stopwatch yoBlueToothDeviceHasConnected { get; set; }
+
         public Form1()
         {
             InitializeComponent();
@@ -19,7 +23,8 @@ namespace gunToShootMe
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ArduinoPort.Open();                 //Opens for commands
+            yoBlueToothDeviceHasConnected = Stopwatch.StartNew();   //Starts stopwatch
+            ArduinoPort.Open();                                     //Opens for commands
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
@@ -39,12 +44,15 @@ namespace gunToShootMe
             if (fireBool == 1) {
                 fireBool = 15; //Placeholder coordinates
             }
-            ArduinoPort.Write(String.Format("X{0}Y{1}Z{2}", 
-                (coordinates.X / (Size.Width / 180)), //Fire at the given coordinates (with math involved for accuracy)
-                (coordinates.Y / (Size.Width / 180)), //Fire at the given coordinates (with math involved for accuracy)
-                (fireBool / (Size.Width / 180))       //Fire if bool gives the "green light"
-                ));
-
+            if (yoBlueToothDeviceHasConnected.ElapsedMilliseconds % 15 == 0) //Every 15 milliseconds, write to arduino
+            {
+                //note for self: if x, y, or firing are wrong way, do max value - whatever it is. IE, 180-coords.blahblahblah
+                ArduinoPort.Write(String.Format("X{0}Y{1}Z{2}",
+                    (coordinates.X / (Size.Width / 180)), //Fire at the given coordinates (with math involved for accuracy)
+                    (coordinates.Y / (Size.Width / 180)), //Fire at the given coordinates (with math involved for accuracy)
+                    (fireBool / (Size.Width / 180))       //Fire if bool gives the "green light"
+                    ));
+            }
         }
     }
 }
